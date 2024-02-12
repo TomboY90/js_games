@@ -82,11 +82,6 @@ function handleKeyDown(e) {
       moveDown();
       break;
   }
-
-  // Left Arrow
-  if (e.keyCode === 37) {
-    moveLeft();
-  }
 }
 document.addEventListener('keyup', handleKeyDown);
 
