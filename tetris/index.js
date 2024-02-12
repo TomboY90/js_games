@@ -61,15 +61,69 @@ function undraw() {
   })
 }
 
+draw();
 
 // 매 초마다 블록을 아래로 움직이기
 timerId = setInterval(moveDown, 1000);
+
+// 좌,우 키 이벤트 할당
+function handleKeyDown(e) {
+  switch (e.keyCode) {
+    case 37:
+      moveLeft();
+      break;
+    case 38:
+      // rotate();
+      break;
+    case 39:
+      moveRight();
+      break;
+    case 40:
+      moveDown();
+      break;
+  }
+
+  // Left Arrow
+  if (e.keyCode === 37) {
+    moveLeft();
+  }
+}
+document.addEventListener('keyup', handleKeyDown);
+
 
 function moveDown() {
   undraw();
   currentPosition += WIDTH;
   draw();
   freeze();
+}
+
+function moveLeft() {
+  undraw();
+
+  const isLeftEdge = currentBlock.some(idx => (currentPosition + idx) % WIDTH === 0);
+
+  if (!isLeftEdge) currentPosition -= 1;
+
+  if (currentBlock.some(idx => grids[currentPosition + idx].classList.contains('collision'))) {
+    currentPosition += 1;
+  }
+
+  draw();
+}
+
+function moveRight() {
+  undraw();
+
+  const isRightEdge = currentBlock.some(idx => (currentPosition + idx) % WIDTH === WIDTH - 1);
+
+  if (!isRightEdge) currentPosition += 1;
+
+  if (currentBlock.some(idx => grids[currentPosition + idx].classList.contains('collision'))) {
+    currentPosition -= 1;
+  }
+
+  draw();
 }
 
 function freeze() {
@@ -86,5 +140,3 @@ function freeze() {
     draw();
   }
 }
-
-draw();
