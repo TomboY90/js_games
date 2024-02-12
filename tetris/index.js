@@ -1,8 +1,9 @@
-const gridContainer = document.querySelector('#grid-container');
-const grids = document.querySelectorAll('.grid');
+const grids = document.querySelectorAll('#grid-container div');
 
 const scoreDisplay = document.querySelector('#score');
 const startBtn = document.querySelector('#start-button');
+
+let timerId;
 
 const WIDTH = 10;
 
@@ -45,15 +46,45 @@ let currentRotation = 0;
 
 // Random select for next block !
 let random = Math.floor(Math.random() * 테트리스_블록_목록.length);
-let nextBlock = 테트리스_블록_목록[random][currentRotation];
+let currentBlock = 테트리스_블록_목록[random][currentRotation];
+
 
 function draw() {
-  console.log('선택된 블록', nextBlock);
-
-  nextBlock.forEach(idx => {
+  currentBlock.forEach(idx => {
     grids[currentPosition + idx].classList.add('block');
   })
 }
 
+function undraw() {
+  currentBlock.forEach(idx => {
+    grids[currentPosition + idx].classList.remove('block');
+  })
+}
+
+
+// 매 초마다 블록을 아래로 움직이기
+timerId = setInterval(moveDown, 1000);
+
+function moveDown() {
+  undraw();
+  currentPosition += WIDTH;
+  draw();
+  freeze();
+}
+
+function freeze() {
+  // 현재 블록 중 어느 곳이라도 바닥과 충돌하였는지 체크
+  if (currentBlock.some(idx => grids[currentPosition + idx + WIDTH].classList.contains('collision'))) {
+    // 만약 충돌하였다면 블록에 충돌 표기
+    currentBlock.forEach(idx => grids[currentPosition + idx].classList.add('collision'))
+
+    // 다시 랜덤 돌리기 , 포지션 리셋
+    random = Math.floor(Math.random() * 테트리스_블록_목록.length);
+    currentBlock = 테트리스_블록_목록[random][currentRotation];
+    currentPosition = 4;
+
+    draw();
+  }
+}
 
 draw();
