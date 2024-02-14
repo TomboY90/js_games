@@ -73,7 +73,7 @@ function handleKeyDown(e) {
       moveLeft();
       break;
     case 38:
-      // rotate();
+      rotate();
       break;
     case 39:
       moveRight();
@@ -118,6 +118,19 @@ function moveRight() {
     currentPosition -= 1;
   }
 
+  draw();
+}
+
+function rotate() {
+  undraw();
+
+  currentRotation++;
+
+  if (currentRotation === currentBlock.length) {
+    currentRotation = 0;
+  }
+
+  currentBlock = 테트리스_블록_목록[random][currentRotation];
   draw();
 }
 
