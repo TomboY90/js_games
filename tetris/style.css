@@ -12,6 +12,10 @@ h1, h2, h3, h4, h5, h6, p {
   text-align: center;
 }
 
+.container {
+  display: flex;
+}
+
 .action-container {
   display: flex;
   align-items: center;
@@ -47,10 +51,11 @@ h1, h2, h3, h4, h5, h6, p {
 
   display: flex;
   flex-wrap: wrap;
-
-  margin: 0 auto;
-
   background-color: yellow;
+
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 #grid-container div {
@@ -60,4 +65,22 @@ h1, h2, h3, h4, h5, h6, p {
 
 .block {
   background-color: blue;
+}
+
+.mini-grid {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+
+  background-color: yellow;
+
+  position: relative;
+  left: 44%;
+  transform: translateX(-44%);
+}
+
+.mini-grid div {
+  width: 20px;
+  height: 20px;
 }

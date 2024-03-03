@@ -6,6 +6,7 @@ const startBtn = document.querySelector('#start-button');
 let timerId;
 
 const WIDTH = 10;
+let nextRandom = 0;
 
 const ㄱ블록 = [
   [ 1, WIDTH + 1, WIDTH * 2 + 1, 2], // rotate 0 degree
@@ -15,9 +16,9 @@ const ㄱ블록 = [
 ]
 const ㄹ블록 = [
   [ 1, 2, WIDTH, WIDTH + 1], // rotate 0 degree
-  [ 1, WIDTH, WIDTH + 1, WIDTH + 2], // rotate 90 degree
+  [ 1, WIDTH + 1, WIDTH + 2, WIDTH * 2 + 2], // rotate 90 degree
   [ 1, 2, WIDTH, WIDTH + 1], // rotate 180 degree
-  [ 1, WIDTH, WIDTH + 1, WIDTH + 2], // rotate 270 degree
+  [ 1, WIDTH + 1, WIDTH + 2, WIDTH * 2 + 2], // rotate 270 degree
 ]
 const ㅗ블록 = [
   [ 1, WIDTH, WIDTH + 1, WIDTH + 2], // rotate 0 degree
@@ -97,7 +98,6 @@ function moveLeft() {
   undraw();
 
   const isLeftEdge = currentBlock.some(idx => (currentPosition + idx) % WIDTH === 0);
-
   if (!isLeftEdge) currentPosition -= 1;
 
   if (currentBlock.some(idx => grids[currentPosition + idx].classList.contains('collision'))) {
@@ -111,7 +111,6 @@ function moveRight() {
   undraw();
 
   const isRightEdge = currentBlock.some(idx => (currentPosition + idx) % WIDTH === WIDTH - 1);
-
   if (!isRightEdge) currentPosition += 1;
 
   if (currentBlock.some(idx => grids[currentPosition + idx].classList.contains('collision'))) {
@@ -125,7 +124,6 @@ function rotate() {
   undraw();
 
   currentRotation++;
-
   if (currentRotation === currentBlock.length) {
     currentRotation = 0;
   }
@@ -141,10 +139,35 @@ function freeze() {
     currentBlock.forEach(idx => grids[currentPosition + idx].classList.add('collision'))
 
     // 다시 랜덤 돌리기 , 포지션 리셋
-    random = Math.floor(Math.random() * 테트리스_블록_목록.length);
+    random = nextRandom;
+    nextRandom = Math.floor(Math.random() * 테트리스_블록_목록.length);
     currentBlock = 테트리스_블록_목록[random][currentRotation];
     currentPosition = 4;
 
     draw();
+    displayShape();
   }
+}
+
+// 다음 블록 보여주기
+const displaySquares = document.querySelectorAll('.mini-grid div');
+const displayWidth = 4;
+let displayIndex = 0;
+
+const 다음_테트리스_블록_목록 = [
+  [1, displayWidth + 1, displayWidth * 2 + 1, 2],
+  [1, 2, displayWidth, displayWidth + 1],
+  [1, displayWidth, displayWidth + 1, displayWidth + 2],
+  [0, 1, displayWidth, displayWidth + 1],
+  [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 3 + 1],
+]
+
+function displayShape() {
+  displaySquares.forEach(square => {
+    square.classList.remove('block')
+  })
+
+  다음_테트리스_블록_목록[nextRandom].forEach(index => {
+    displaySquares[displayIndex + index].classList.add('block');
+  })
 }
